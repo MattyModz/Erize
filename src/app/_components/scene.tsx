@@ -105,7 +105,7 @@ const Scene: React.FC = () => {
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
             <img
-              src="/logo.png"
+              src="/Logo.png"
               alt="Loading..."
               className="h-24 w-24 animate-spin"
             />
