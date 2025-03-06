@@ -1,74 +1,147 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
+import * as THREE from "three";
 
-const Footer = () => {
+/* ------------------------------------------------------------------
+ * 1) ProkaryoteModel: Loads the GLTF scene & handles loading state
+ * ----------------------------------------------------------------*/
+interface ProkaryoteModelProps {
+  onLoaded: () => void;
+  onNodeClick: (position: THREE.Vector3, name: string) => void;
+}
+
+const ProkaryoteModel: React.FC<ProkaryoteModelProps> = ({
+  onLoaded,
+  onNodeClick,
+}) => {
+  const { scene } = useGLTF("/scene.gltf", true); // ✅ Triggers `onLoaded` when model loads
+
+  React.useEffect(() => {
+    if (scene) {
+      onLoaded();
+    }
+  }, [scene, onLoaded]);
+
+  const handlePointerDown = (e: THREE.Event & { object: THREE.Mesh }): void => {
+    (e as unknown as React.MouseEvent).stopPropagation();
+    const pos = new THREE.Vector3();
+    e.object.getWorldPosition(pos);
+    onNodeClick(pos, e.object.name);
+  };
+
+  return <primitive object={scene} onPointerDown={handlePointerDown} />;
+};
+
+/* ------------------------------------------------------------------
+ * 2) Scene: Main component with loading state
+ * ----------------------------------------------------------------*/
+const Scene: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [selectedPart, setSelectedPart] = useState<string | null>(null);
+  const [selectedDesc, setSelectedDesc] = useState<string | null>(null);
+
+  // When a part is clicked, update selection
+  const handleFocusOnNode = (nodePosition: THREE.Vector3, nodeName: string) => {
+    setSelectedPart(nodeName);
+    setSelectedDesc(
+      `Description of ${nodeName}`, // Replace with your actual descriptions
+    );
+  };
+
   return (
-    <footer className="fixed bottom-0 left-0 flex w-full flex-col items-center justify-center bg-white/30 py-6 shadow-lg backdrop-blur-lg">
-      {/* Logo */}
-      <img
-        src="/Logo.png"
-        alt="Logo"
-        className="mb-3 h-12 w-12 animate-bounce"
-      />
+    <>
+      {/* ✅ Show Loading Screen While Model Loads */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+          <img
+            src="/logo.png"
+            alt="Loading..."
+            className="h-24 w-24 animate-spin"
+          />
+        </div>
+      )}
 
-      {/* Social Links */}
-      <div className="flex gap-6">
-        <a href="#" className="text-gray-800 transition hover:text-blue-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="h-6 w-6"
+      {/* 3D Canvas */}
+      <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+
+          {/* ✅ Pass `setLoading(false)` when model is fully loaded */}
+          <ProkaryoteModel
+            onLoaded={() => setLoading(false)}
+            onNodeClick={handleFocusOnNode}
+          />
+
+          {/* 🎯 Enable free camera movement */}
+          <OrbitControls
+            enablePan
+            enableRotate
+            enableZoom
+            minDistance={2}
+            maxDistance={10}
+          />
+        </Canvas>
+
+        {/* Bottom Info Panel */}
+        {selectedPart && (
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              bottom: 0,
+              width: "100%",
+              transform: "translateY(0%)",
+              transition: "transform 0.3s ease-in-out",
+              background: "#fff",
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
+              boxShadow: "0 -2px 10px rgba(0,0,0,0.2)",
+              padding: "20px",
+              maxHeight: "40%",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M18 2h-3a6 6 0 00-6 6v3H6v4h3v8h4v-8h3l1-4h-4V8a2 2 0 012-2h2V2z"
+            {/* Drag Handle */}
+            <div
+              style={{
+                width: "50px",
+                height: "5px",
+                backgroundColor: "#ccc",
+                borderRadius: "5px",
+                marginBottom: "10px",
+              }}
             />
-          </svg>
-        </a>
-        <a href="#" className="text-gray-800 transition hover:text-blue-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M23 3a10.9 10.9 0 01-3.14 1A4.48 4.48 0 0012 7v1a10.66 10.66 0 01-9.5-5S1 6 2 8a4.48 4.48 0 01-2-2s0 6 6 8a12.64 12.64 0 01-7 2c8 5 17 2 17-10v-1A7.72 7.72 0 0023 3z"
-            />
-          </svg>
-        </a>
-        <a href="#" className="text-gray-800 transition hover:text-blue-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM9 19H6V9h3v10zm-1.5-11.3a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM20 19h-3v-5.3c0-3-3-2.7-3 0V19h-3V9h3v1.6c1.3-2.3 6-2.5 6 2.2V19z"
-            />
-          </svg>
-        </a>
+
+            <h3 style={{ margin: "0 0 10px" }}>{selectedPart}</h3>
+            <p style={{ margin: 0, textAlign: "center" }}>{selectedDesc}</p>
+            <button
+              style={{
+                marginTop: "20px",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                background: "#0070f3",
+                color: "#fff",
+                cursor: "pointer",
+                border: "none",
+              }}
+              onClick={() => {
+                setSelectedPart(null);
+                setSelectedDesc(null);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        )}
       </div>
-
-      {/* Copyright */}
-      <p className="mt-3 text-sm text-gray-700">
-        &copy; {new Date().getFullYear()} MyApp. All rights reserved.
-      </p>
-    </footer>
+    </>
   );
 };
 
-export default Footer;
+export default Scene;
