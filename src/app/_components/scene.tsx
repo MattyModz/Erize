@@ -24,7 +24,7 @@ const meshLookup: Record<string, MeshProperties> = {
   cytoplasm_001_cytoplasm_001_0: {
     visible: true,
 
-    texture: "/textures/cytoplasm.jpg",
+    texture: "/textures/cytoplasm_001_normal.png",
   },
   cell_wall_cell_wall_0: {
     visible: true,
