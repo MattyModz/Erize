@@ -210,7 +210,7 @@ const PartIndicator: React.FC<PartIndicatorProps> = ({
           backdropFilter: "blur(4px)",
         }}
       >
-        {label || ""}
+        {label ?? ""}
       </div>
     </Html>
   );
@@ -263,7 +263,7 @@ const Scene: React.FC = () => {
 
     setSelectedPart(nodeName);
     setSelectedDesc(
-      partDescriptions[nodeName] || "No description available for this part.",
+      partDescriptions[nodeName] ?? "No description available for this part.",
     );
   };
 
