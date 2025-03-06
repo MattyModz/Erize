@@ -22,7 +22,9 @@ const Header = () => {
             y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
           }}
         />
-        <span className="text-xl font-bold text-gray-900">MyApp</span>
+        <span className="text-xl font-bold text-gray-900">
+          Cholera uncovered
+        </span>
       </div>
 
       {/* Desktop Nav */}
