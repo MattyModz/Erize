@@ -1,6 +1,7 @@
 import "~/styles/globals.css";
 import { Roboto } from "next/font/google";
-
+import Header from "./_components/header";
+import Footer from "./_components/footer";
 const roboto = Roboto({
   weight: "400",
   subsets: ["latin"],
@@ -22,7 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en " className={roboto.className}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Header />
+          {children}
+        </TRPCReactProvider>
+        <Footer />
       </body>
     </html>
   );
