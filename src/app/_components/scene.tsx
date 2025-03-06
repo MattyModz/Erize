@@ -217,7 +217,9 @@ const Scene: React.FC = () => {
           <pointLight position={[10, 10, 10]} />
           <ProkaryoteModel
             onLoaded={() => setLoading(false)}
-            onNodeClick={() => {}}
+            onNodeClick={() => {
+              handleNodeClick;
+            }}
           />
           <OrbitControls
             enablePan
@@ -233,3 +235,6 @@ const Scene: React.FC = () => {
 };
 
 export default Scene;
+const handleNodeClick = () => {
+  // Placeholder function, can be extended later
+};
