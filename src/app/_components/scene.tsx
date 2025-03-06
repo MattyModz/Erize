@@ -84,24 +84,24 @@ const ProkaryoteModel: React.FC<ProkaryoteModelProps> = ({
   const { scene } = useGLTF("/scene.gltf");
   const textureLoader = new THREE.TextureLoader();
 
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material) {
-        const lookup = meshLookup[child.name];
-        if (lookup) {
-          child.visible = lookup.visible;
-          if (lookup.texture) {
-            textureLoader.load(lookup.texture, (texture) => {
-              child.material.map = texture;
-              child.material.needsUpdate = true;
-            });
-          }
-        }
-      }
-    });
+  // useEffect(() => {
+  //   scene.traverse((child) => {
+  //     if (child instanceof THREE.Mesh && child.material) {
+  //       const lookup = meshLookup[child.name];
+  //       if (lookup) {
+  //         child.visible = lookup.visible;
+  //         if (lookup.texture) {
+  //           textureLoader.load(lookup.texture, (texture) => {
+  //             child.material.map = texture;
+  //             child.material.needsUpdate = true;
+  //           });
+  //         }
+  //       }
+  //     }
+  //   });
 
-    onLoaded();
-  }, [scene, onLoaded]);
+  //   onLoaded();
+  // }, [scene, onLoaded]);
 
   const handlePointerDown = (e: THREE.Event & { object: THREE.Mesh }): void => {
     (e as unknown as React.MouseEvent).stopPropagation();
@@ -205,7 +205,7 @@ const Scene: React.FC = () => {
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
             <img
-              src="/logo.png"
+              src="/Logo.png"
               alt="Loading..."
               className="h-24 w-24 animate-spin"
             />
