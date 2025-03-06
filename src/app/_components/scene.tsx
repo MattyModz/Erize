@@ -18,11 +18,11 @@ const meshLookup: Record<string, MeshProperties> = {
   cell_wall_cell_wall_0: { visible: true, texture: "/textures/cellwall.png" },
   fimbria_fimbria_0: { visible: true, texture: "/textures/fimbria.png" },
   flagellum_001_flagellum_001_0: {
-    visible: true,
+    visible: false,
     texture: "/textures/flagellum.png",
   }, // ✅ Only one flagellum
   flagellum_002_flagellum_002_0: { visible: false },
-  flagellum_003_flagellum_003_0: { visible: false },
+  flagellum_003_flagellum_003_0: { visible: true },
   flagellum_004_flagellum_004_0: { visible: false },
   nucleoid_nucleoid_0: { visible: true, texture: "/textures/nucleoid.png" },
   plasma_membrane_plasma_membrane_0: {
@@ -204,7 +204,7 @@ const Scene: React.FC = () => {
       >
         {/* ✅ Fix: Hide the loading screen as soon as model is fully loaded */}
         {loading && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
             <img
               src="/Logo.png"
               alt="Loading..."
