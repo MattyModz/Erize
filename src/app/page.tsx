@@ -1,4 +1,3 @@
-"use client";
 // import Scene from "./_components/scene";
 
 export default function Home() {
