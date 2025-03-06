@@ -129,28 +129,28 @@ interface ProkaryoteModelProps {
 const ProkaryoteModel: React.FC<ProkaryoteModelProps> = ({ onNodeClick }) => {
   const { scene } = useGLTF("/scene.gltf");
 
-  useEffect(() => {
-    const textureLoader = new THREE.TextureLoader();
+  // useEffect(() => {
+  //   const textureLoader = new THREE.TextureLoader();
 
-    scene.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material) {
-        const lookup = meshLookup[child.name];
-        if (lookup) {
-          // Keep the model's default color/material from GLTF
-          // but optionally apply a texture or visibility from the lookup.
-          if (lookup.texture) {
-            const material = new THREE.MeshStandardMaterial();
-            textureLoader.load(lookup.texture, (texture) => {
-              material.map = texture;
-              material.needsUpdate = true;
-            });
-            child.material = material;
-          }
-          child.visible = lookup.visible;
-        }
-      }
-    });
-  }, [scene]);
+  //   scene.traverse((child) => {
+  //     if (child instanceof THREE.Mesh && child.material) {
+  //       const lookup = meshLookup[child.name];
+  //       if (lookup) {
+  //         // Keep the model's default color/material from GLTF
+  //         // but optionally apply a texture or visibility from the lookup.
+  //         if (lookup.texture) {
+  //           const material = new THREE.MeshStandardMaterial();
+  //           textureLoader.load(lookup.texture, (texture) => {
+  //             material.map = texture;
+  //             material.needsUpdate = true;
+  //           });
+  //           child.material = material;
+  //         }
+  //         child.visible = lookup.visible;
+  //       }
+  //     }
+  //   });
+  // }, [scene]);
 
   // Handle mesh clicks by getting its world position
   const handlePointerDown = (e: THREE.Event & { object: THREE.Mesh }): void => {

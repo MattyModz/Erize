@@ -1,4 +1,10 @@
 import "~/styles/globals.css";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 import { type Metadata } from "next";
 
@@ -14,7 +20,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en " className={roboto.className}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
