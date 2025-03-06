@@ -82,26 +82,20 @@ const ProkaryoteModel: React.FC<ProkaryoteModelProps> = ({
   onNodeClick,
 }) => {
   const { scene } = useGLTF("/scene.gltf");
-  const textureLoader = new THREE.TextureLoader();
 
-  // useEffect(() => {
-  //   scene.traverse((child) => {
-  //     if (child instanceof THREE.Mesh && child.material) {
-  //       const lookup = meshLookup[child.name];
-  //       if (lookup) {
-  //         child.visible = lookup.visible;
-  //         if (lookup.texture) {
-  //           textureLoader.load(lookup.texture, (texture) => {
-  //             child.material.map = texture;
-  //             child.material.needsUpdate = true;
-  //           });
-  //         }
-  //       }
-  //     }
-  //   });
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const lookup = meshLookup[child.name];
+        if (lookup) {
+          child.visible = lookup.visible;
+        }
+      }
+    });
 
-  //   onLoaded();
-  // }, [scene, onLoaded]);
+    // ✅ Call onLoaded immediately since no textures need to be loaded
+    onLoaded();
+  }, [scene, onLoaded]);
 
   const handlePointerDown = (e: THREE.Event & { object: THREE.Mesh }): void => {
     (e as unknown as React.MouseEvent).stopPropagation();
@@ -192,6 +186,12 @@ const PartIndicator: React.FC<PartIndicatorProps> = ({
 const Scene: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (!loading) {
+      console.log("Model fully loaded!");
+    }
+  }, [loading]);
+
   return (
     <>
       <div
@@ -202,6 +202,7 @@ const Scene: React.FC = () => {
           marginTop: "10vh",
         }}
       >
+        {/* ✅ Fix: Hide the loading screen as soon as model is fully loaded */}
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
             <img
