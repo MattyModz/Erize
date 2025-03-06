@@ -218,7 +218,7 @@ const Scene: React.FC = () => {
           <ProkaryoteModel
             onLoaded={() => setLoading(false)}
             onNodeClick={() => {
-              handleNodeClick;
+              handleNodeClick();
             }}
           />
           <OrbitControls
