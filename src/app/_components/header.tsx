@@ -10,7 +10,7 @@ const Header = () => {
       {/* Logo with Animation */}
       <div className="flex items-center gap-2">
         <motion.img
-          src="/logo.png"
+          src="/Logo.png"
           alt="Logo"
           className="h-10 w-10"
           animate={{
