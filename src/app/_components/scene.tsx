@@ -263,7 +263,7 @@ const Scene: React.FC = () => {
 
     setSelectedPart(nodeName);
     setSelectedDesc(
-      partDescriptions[nodeName] ?? "No description available for this part.",
+      partDescriptions[nodeName] ?? "No description availables for this part.",
     );
   };
 
