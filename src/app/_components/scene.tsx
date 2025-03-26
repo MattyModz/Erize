@@ -185,22 +185,12 @@ const PartIndicator: React.FC<PartIndicatorProps> = ({
  * ----------------------------------------------------------------*/
 const Scene: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [selectedPartDescription, setSelectedPartDescription] = useState<
-    string | null
-  >(null);
 
-  // Handler to update the description when a part is clicked
-  const handlePartClick = (position: THREE.Vector3, meshName: string) => {
-    const partName = partNameMapping[meshName];
-    if (partName) {
-      const description = partDescriptions[partName];
-      if (description) {
-        setSelectedPartDescription(description);
-      } else {
-        setSelectedPartDescription(null);
-      }
+  useEffect(() => {
+    if (!loading) {
+      console.log("Model fully loaded!");
     }
-  };
+  }, [loading]);
 
   return (
     <>
@@ -212,6 +202,7 @@ const Scene: React.FC = () => {
           marginTop: "10vh",
         }}
       >
+        {/* ✅ Fix: Hide the loading screen as soon as model is fully loaded */}
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <img
@@ -227,13 +218,7 @@ const Scene: React.FC = () => {
           <pointLight position={[10, 10, 10]} />
           <ProkaryoteModel
             onLoaded={() => setLoading(false)}
-            onNodeClick={handlePartClick}
-          />
-          {/* Render a PartIndicator for one mesh; add more as needed */}
-          <PartIndicator
-            meshName="capsule_capsule_0"
-            label={partNameMapping["capsule_capsule_0"]}
-            onClick={handlePartClick}
+            onNodeClick={() => {}}
           />
           <OrbitControls
             enablePan
@@ -243,33 +228,12 @@ const Scene: React.FC = () => {
             maxDistance={10}
           />
         </Canvas>
-
-        {/* Display the description overlay when a part is selected */}
-        {selectedPartDescription && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: "20px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              backgroundColor: "rgba(255, 255, 255, 0.8)",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              maxWidth: "80%",
-              textAlign: "center",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-            }}
-          >
-            <p>{selectedPartDescription}</p>
-          </div>
-        )}
       </div>
     </>
   );
 };
 
 export default Scene;
-
 const handleNodeClick = () => {
   // Placeholder function, can be extended later
 };

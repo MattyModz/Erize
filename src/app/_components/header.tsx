@@ -23,7 +23,7 @@ const Header = () => {
           }}
         />
         <span className="text-xl font-bold text-gray-900">
-          Cholera uncovered
+          Cholera Uncovered
         </span>
       </div>
 
