@@ -284,16 +284,18 @@ const Scene: FC = () => {
         )}
       </div>
       {/* Horizontal list of buttons for each part */}
-      <div className="overflow-y-none mt-4 flex max-h-32 w-full flex-wrap justify-center">
-        {Object.keys(partNameMapping).map((meshName) => (
-          <button
-            key={meshName}
-            onClick={() => setSelectedPart(meshName)}
-            className="m-1 rounded border px-4 py-2 hover:bg-green-100"
-          >
-            {partNameMapping[meshName] ?? ""}
-          </button>
-        ))}
+      <div className="mt-4 w-full overflow-x-auto overflow-y-hidden">
+        <div className="flex flex-nowrap justify-start space-x-2 px-2">
+          {Object.keys(partNameMapping).map((meshName) => (
+            <button
+              key={meshName}
+              onClick={() => setSelectedPart(meshName)}
+              className="whitespace-nowrap rounded border px-4 py-2 hover:bg-green-100"
+            >
+              {partNameMapping[meshName] ?? ""}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
