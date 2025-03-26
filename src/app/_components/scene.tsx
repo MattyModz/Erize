@@ -1,12 +1,18 @@
 "use client";
-import type { FC, Dispatch, SetStateAction } from "react";
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  FC,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 // --- Type Definitions ---
+
 interface MeshProperties {
   visible: boolean;
   texture?: string;
@@ -99,8 +105,10 @@ const ProkaryoteModel: FC<ProkaryoteModelProps> = ({
     onLoaded();
   }, [scene, onLoaded, setMeshPositions]);
 
-  const handlePointerDown = (e: THREE.Event & { object: THREE.Mesh }): void => {
-    (e as unknown as React.MouseEvent).stopPropagation();
+  const handlePointerDown = (
+    e: THREE.Event & { object: THREE.Mesh } & React.PointerEvent,
+  ): void => {
+    e.stopPropagation();
     const pos = new THREE.Vector3();
     e.object.getWorldPosition(pos);
     onNodeClick(pos, e.object.name);
@@ -188,21 +196,21 @@ const Scene: FC = () => {
     Record<string, THREE.Vector3>
   >({});
   const [selectedPart, setSelectedPart] = useState<string | null>(null);
-  // Typed ref for OrbitControls using OrbitControlsImpl from three-stdlib
-  const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const controlsRef = useRef<any>(null);
 
-  // CameraUpdater updates the OrbitControls target without locking camera navigation.
+  // CameraUpdater updates the OrbitControls target on part selection.
+  // This one-time update does not lock free camera navigation.
+  // CameraUpdater now only updates the controls target.
   const CameraUpdater: FC = () => {
     const { camera } = useThree();
     useEffect(() => {
       if (selectedPart && meshPositions[selectedPart] && controlsRef.current) {
         const targetPos = meshPositions[selectedPart];
         controlsRef.current.target.copy(targetPos);
-        // Removed camera repositioning to allow free navigation.
+        // Removed camera.position.set(...) to avoid locking camera position.
         controlsRef.current.update();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedPart]);
+    }, [selectedPart, meshPositions, camera]);
     return null;
   };
 
@@ -226,7 +234,6 @@ const Scene: FC = () => {
       >
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
-            {/* Consider using Next.js Image component for optimization */}
             <img
               src="/Logo.png"
               alt="Loading..."
@@ -256,7 +263,7 @@ const Scene: FC = () => {
             <PartIndicator
               key={meshName}
               meshName={meshName}
-              label={partNameMapping[meshName] ?? "Unknown Part"}
+              label={partNameMapping[meshName] || "Unknown Part"}
               onClick={handlePartSelect}
             />
           ))}
@@ -277,25 +284,27 @@ const Scene: FC = () => {
             }}
           >
             <h2 className="mb-2 text-xl font-semibold">
-              {partNameMapping[selectedPart] ?? ""}
+              {partNameMapping[selectedPart]}
             </h2>
-            <p>{partDescriptions[partNameMapping[selectedPart] ?? ""] ?? ""}</p>
+            <p>
+              {selectedPart &&
+                partNameMapping[selectedPart] &&
+                partDescriptions[partNameMapping[selectedPart]]}
+            </p>
           </div>
         )}
       </div>
       {/* Horizontal list of buttons for each part */}
-      <div className="mt-4 w-full overflow-x-auto overflow-y-hidden">
-        <div className="flex flex-nowrap justify-start space-x-2 px-2">
-          {Object.keys(partNameMapping).map((meshName) => (
-            <button
-              key={meshName}
-              onClick={() => setSelectedPart(meshName)}
-              className="whitespace-nowrap rounded border px-4 py-2 hover:bg-green-100"
-            >
-              {partNameMapping[meshName] ?? ""}
-            </button>
-          ))}
-        </div>
+      <div className="mt-4 flex justify-center space-x-2">
+        {Object.keys(partNameMapping).map((meshName) => (
+          <button
+            key={meshName}
+            onClick={() => setSelectedPart(meshName)}
+            className="rounded border px-4 py-2 hover:bg-green-100"
+          >
+            {partNameMapping[meshName]}
+          </button>
+        ))}
       </div>
     </div>
   );
