@@ -24,9 +24,9 @@ export default function RootLayout({
     <html lang="en " className={roboto.className}>
       <body>
         <TRPCReactProvider>
-          <Header />
+          {/* <Header /> */}
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </TRPCReactProvider>
       </body>
     </html>

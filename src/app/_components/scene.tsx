@@ -218,7 +218,7 @@ const Scene: React.FC = () => {
           <pointLight position={[10, 10, 10]} />
           <ProkaryoteModel
             onLoaded={() => setLoading(false)}
-            onNodeClick={() => {}}
+            onNodeClick={(position, name) => handleNodeClick()}
           />
           <OrbitControls
             enablePan
