@@ -126,57 +126,57 @@ interface PartIndicatorProps {
   onClick: (position: THREE.Vector3, name: string) => void;
 }
 
-const PartIndicator: FC<PartIndicatorProps> = ({
-  meshName,
-  label,
-  position,
-  onClick,
-}) => {
-  const [hovered, setHovered] = useState<boolean>(false);
-  const [clicked, setClicked] = useState<boolean>(false);
+// const PartIndicator: FC<PartIndicatorProps> = ({
+//   meshName,
+//   label,
+//   position,
+//   onClick,
+// }) => {
+//   const [hovered, setHovered] = useState<boolean>(false);
+//   const [clicked, setClicked] = useState<boolean>(false);
 
-  return (
-    <Html position={position}>
-      <div
-        onClick={() => {
-          onClick(position, meshName);
-          setClicked(true);
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{
-          width: "20px",
-          height: "20px",
-          backgroundColor: clicked ? "rgba(0, 0, 0, 0.6)" : "white",
-          border: clicked ? "2px solid rgba(0, 0, 0, 0.6)" : "2px solid black",
-          borderRadius: "50%",
-          cursor: "pointer",
-          transition: "background 0.3s ease, border 0.3s ease",
-        }}
-      >
-        {hovered && (
-          <div
-            style={{
-              position: "absolute",
-              top: "-30px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              padding: "6px 12px",
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              color: "white",
-              borderRadius: "6px",
-              fontSize: "12px",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {label}
-          </div>
-        )}
-      </div>
-    </Html>
-  );
-};
+//   return (
+//     <Html position={position}>
+//       <div
+//         onClick={() => {
+//           onClick(position, meshName);
+//           setClicked(true);
+//         }}
+//         onMouseEnter={() => setHovered(true)}
+//         onMouseLeave={() => setHovered(false)}
+//         style={{
+//           width: "20px",
+//           height: "20px",
+//           backgroundColor: clicked ? "rgba(0, 0, 0, 0.6)" : "white",
+//           border: clicked ? "2px solid rgba(0, 0, 0, 0.6)" : "2px solid black",
+//           borderRadius: "50%",
+//           cursor: "pointer",
+//           transition: "background 0.3s ease, border 0.3s ease",
+//         }}
+//       >
+//         {hovered && (
+//           <div
+//             style={{
+//               position: "absolute",
+//               top: "-30px",
+//               left: "50%",
+//               transform: "translateX(-50%)",
+//               padding: "6px 12px",
+//               backgroundColor: "rgba(0, 0, 0, 0.8)",
+//               color: "white",
+//               borderRadius: "6px",
+//               fontSize: "12px",
+//               fontWeight: "bold",
+//               whiteSpace: "nowrap",
+//             }}
+//           >
+//             {label}
+//           </div>
+//         )}
+//       </div>
+//     </Html>
+//   );
+// };
 
 // --- Main Scene Component ---
 const Scene: FC = () => {
@@ -246,7 +246,7 @@ const Scene: FC = () => {
           />
           <CameraUpdater />
           {/* Render white dot indicators for each part */}
-          {Object.keys(partNameMapping).map((meshName) => {
+          {/* {Object.keys(partNameMapping).map((meshName) => {
             const pos = meshPositions[meshName];
             return pos ? (
               <PartIndicator
@@ -257,7 +257,7 @@ const Scene: FC = () => {
                 onClick={handlePartSelect}
               />
             ) : null;
-          })}
+          })} */}
         </Canvas>
       </div>
     </div>
