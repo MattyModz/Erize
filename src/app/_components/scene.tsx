@@ -10,6 +10,8 @@ import React, {
 import { Canvas, useThree, ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
+// Import the OrbitControls type from three-stdlib for type safety.
+import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 // --- Type Definitions ---
 interface MeshProperties {
@@ -124,57 +126,57 @@ interface PartIndicatorProps {
   onClick: (position: THREE.Vector3, name: string) => void;
 }
 
-// const PartIndicator: FC<PartIndicatorProps> = ({
-//   meshName,
-//   label,
-//   position,
-//   onClick,
-// }) => {
-//   const [hovered, setHovered] = useState<boolean>(false);
-//   const [clicked, setClicked] = useState<boolean>(false);
+const PartIndicator: FC<PartIndicatorProps> = ({
+  meshName,
+  label,
+  position,
+  onClick,
+}) => {
+  const [hovered, setHovered] = useState<boolean>(false);
+  const [clicked, setClicked] = useState<boolean>(false);
 
-//   return (
-//     <Html position={position}>
-//       <div
-//         onClick={() => {
-//           onClick(position, meshName);
-//           setClicked(true);
-//         }}
-//         onMouseEnter={() => setHovered(true)}
-//         onMouseLeave={() => setHovered(false)}
-//         style={{
-//           width: "20px",
-//           height: "20px",
-//           backgroundColor: clicked ? "rgba(0, 0, 0, 0.6)" : "white",
-//           border: clicked ? "2px solid rgba(0, 0, 0, 0.6)" : "2px solid black",
-//           borderRadius: "50%",
-//           cursor: "pointer",
-//           transition: "background 0.3s ease, border 0.3s ease",
-//         }}
-//       >
-//         {hovered && (
-//           <div
-//             style={{
-//               position: "absolute",
-//               top: "-30px",
-//               left: "50%",
-//               transform: "translateX(-50%)",
-//               padding: "6px 12px",
-//               backgroundColor: "rgba(0, 0, 0, 0.8)",
-//               color: "white",
-//               borderRadius: "6px",
-//               fontSize: "12px",
-//               fontWeight: "bold",
-//               whiteSpace: "nowrap",
-//             }}
-//           >
-//             {label}
-//           </div>
-//         )}
-//       </div>
-//     </Html>
-//   );
-// };
+  return (
+    <Html position={position}>
+      <div
+        onClick={() => {
+          onClick(position, meshName);
+          setClicked(true);
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          width: "20px",
+          height: "20px",
+          backgroundColor: clicked ? "rgba(0, 0, 0, 0.6)" : "white",
+          border: clicked ? "2px solid rgba(0, 0, 0, 0.6)" : "2px solid black",
+          borderRadius: "50%",
+          cursor: "pointer",
+          transition: "background 0.3s ease, border 0.3s ease",
+        }}
+      >
+        {hovered && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-30px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              padding: "6px 12px",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              color: "white",
+              borderRadius: "6px",
+              fontSize: "12px",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {label}
+          </div>
+        )}
+      </div>
+    </Html>
+  );
+};
 
 // --- Main Scene Component ---
 const Scene: FC = () => {
@@ -183,7 +185,8 @@ const Scene: FC = () => {
     Record<string, THREE.Vector3>
   >({});
   const [selectedPart, setSelectedPart] = useState<string | null>(null);
-  const controlsRef = useRef<any>(null);
+  // Replace the 'any' type with the explicit OrbitControlsImpl type.
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
   // CameraUpdater now only updates the orbit controls target.
   const CameraUpdater: FC = () => {
@@ -243,7 +246,7 @@ const Scene: FC = () => {
           />
           <CameraUpdater />
           {/* Render white dot indicators for each part */}
-          {/* {Object.keys(partNameMapping).map((meshName) => {
+          {Object.keys(partNameMapping).map((meshName) => {
             const pos = meshPositions[meshName];
             return pos ? (
               <PartIndicator
@@ -254,10 +257,20 @@ const Scene: FC = () => {
                 onClick={handlePartSelect}
               />
             ) : null;
-          })} */}
+          })}
         </Canvas>
-        {/* Overlay description dialogue with slightly opaque background */}
-        {/* {selectedPart && (
+      </div>
+    </div>
+  );
+};
+
+export default Scene;
+
+{
+  /* Overlay description dialogue with slightly opaque background */
+}
+{
+  /* {selectedPart && (
           <div
             style={{
               position: "absolute",
@@ -279,9 +292,13 @@ const Scene: FC = () => {
             )}
           </div>
         )}
-      </div> */}
-        {/* Horizontal list of buttons for each part */}
-        {/* <div className="mt-4 flex justify-center space-x-2 overflow-y-hidden">
+      </div> */
+}
+{
+  /* Horizontal list of buttons for each part */
+}
+{
+  /* <div className="mt-4 flex justify-center space-x-2 overflow-y-hidden">
         {Object.keys(partNameMapping).map((meshName) => (
           <button
             key={meshName}
@@ -290,11 +307,5 @@ const Scene: FC = () => {
           >
             {partNameMapping[meshName]}
           </button>
-        ))}
-      </div> */}
-      </div>
-    </div>
-  );
-};
-
-export default Scene;
+        ))}*/
+}
