@@ -252,7 +252,7 @@ const Scene: FC = () => {
               <PartIndicator
                 key={meshName}
                 meshName={meshName}
-                label={partNameMapping[meshName] || "Unknown Part"}
+                label={partNameMapping[meshName] ?? "Unknown Part"}
                 position={pos}
                 onClick={handlePartSelect}
               />
