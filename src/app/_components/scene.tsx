@@ -216,7 +216,7 @@ const Scene: FC = () => {
           position: "relative",
           width: "100%",
           height: "80vh",
-          marginTop: "10vh",
+          marginTop: "3vh",
         }}
       >
         {loading && (
